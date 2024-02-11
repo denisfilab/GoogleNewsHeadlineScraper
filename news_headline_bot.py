@@ -6,20 +6,21 @@ from selenium import webdriver
 from scrapy.selector import Selector
 import time
 from selenium.webdriver.common.by import By
+import sys
 
 
 
-def getNews(term, input_date):
+def getNews(term, start_date, end_date):
     start_time = time.time()
     df = pd.DataFrame(columns=['date', 'company', 'headline', 'sub_headline', 'url'])
 
     # get list of dates, format is MM/DD/YYYY
-    input_date_format = '%m/%d/%Y'
-    start_date = datetime.datetime.strptime(input_date, input_date_format)
-    current_time = datetime.datetime.today()
-    days_diff = (current_time - start_date).days
+    date_format = '%m/%d/%Y'
+    start_date = datetime.datetime.strptime(start_date, date_format)
+    end_date = datetime.datetime.strptime(end_date, date_format)
+    days_diff = (end_date - start_date).days
 
-    date_list = [(current_time - datetime.timedelta(days=x)).strftime('%m/%d/%Y') for x in range(days_diff+1)]
+    date_list = [(end_date - datetime.timedelta(days=x)).strftime('%m/%d/%Y') for x in range(days_diff+1)]
     date_list.reverse() # start from the oldest date
 
     driver = webdriver.Chrome('chromedriver.exe')
@@ -66,8 +67,14 @@ def getNews(term, input_date):
     driver.quit()
 
 
-getNews('Tesla', '02/09/2017')
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print("Usage: python news_headline_bot.py <search_term> <start_date> <end_date>")
+        sys.exit(1)
 
+    term = sys.argv[1]
+    start_date = sys.argv[2]
+    end_date = sys.argv[3]
 
-
+    getNews(term, start_date, end_date)
 
