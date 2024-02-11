@@ -1,4 +1,4 @@
-﻿# GoogleNewsHeadlineScrapes
+﻿# Google News Headline Scraper
 
 This Python script scrapes news headlines from Google News for a specific search term, from a specified start date to the current date. The scraped data includes the date of the news, headline, sub-headline, URL, and the news company. The data is saved to a CSV file.
 
